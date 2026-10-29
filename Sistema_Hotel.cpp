@@ -304,3 +304,148 @@ void eliminarHuesped() {
     delete actual;
     cout << "Huesped eliminado correctamente.\n";
 }
+
+bool colaVacia() {
+    return frente == NULL;
+}
+
+void mostrarCola() {
+    if (colaVacia()) {
+        cout << "No hay huespedes en la cola de recepcion.\n";
+        return;
+    }
+
+    NodoCola* actual = frente;
+    cout << "Cola de recepcion (VIP primero):\n";
+
+    while (actual != NULL) {
+        NodoLista* huesped = buscarHuesped(actual->codigo);
+        if (huesped != NULL) {
+            cout << "Codigo: " << actual->codigo
+                 << " | Nombre: " << huesped->nombre;
+            if (actual->prioridad == 1) {
+                cout << " | Prioridad: VIP\n";
+            } else {
+                cout << " | Prioridad: Regular\n";
+            }
+        }
+        actual = actual->siguiente;
+    }
+}
+
+void consultarFrenteCola() {
+    if (colaVacia()) {
+        cout << "La cola esta vacia; no hay huesped para consultar.\n";
+        return;
+    }
+
+    NodoLista* huesped = buscarHuesped(frente->codigo);
+    cout << "Huesped que sigue para atencion:\n";
+    cout << "Codigo: " << frente->codigo << endl;
+    if (huesped != NULL) {
+        cout << "Nombre: " << huesped->nombre << endl;
+    }
+    if (frente->prioridad == 1) {
+        cout << "Prioridad: VIP\n";
+    } else {
+        cout << "Prioridad: Regular\n";
+    }
+}
+
+void contarEnCola() {
+    int contador = 0;
+    NodoCola* actual = frente;
+
+    while (actual != NULL) {
+        contador++;
+        actual = actual->siguiente;
+    }
+
+    cout << "Huespedes en espera: " << contador << endl;
+}
+
+void buscarHuespedEnCola() {
+    int codigo;
+    cout << "Ingrese el codigo del huesped que desea buscar en la cola: ";
+    cin >> codigo;
+    cin.ignore(10000, '\n');
+
+    NodoCola* actual = frente;
+    while (actual != NULL) {
+        if (actual->codigo == codigo) {
+            cout << "El huesped se encuentra esperando en la cola.\n";
+            cout << "Prioridad: " << actual->prioridad << endl;
+            return;
+        }
+        actual = actual->siguiente;
+    }
+
+    cout << "El huesped no se encuentra en la cola de espera.\n";
+}
+
+void cancelarEspera() {
+    int codigo;
+    cout << "Ingrese el codigo del huesped que cancela la espera: ";
+    cin >> codigo;
+    cin.ignore(10000, '\n');
+
+    NodoCola* actual = frente;
+    NodoCola* anterior = NULL;
+
+    while (actual != NULL && actual->codigo != codigo) {
+        anterior = actual;
+        actual = actual->siguiente;
+    }
+
+    if (actual == NULL) {
+        cout << "El huesped no se encuentra en la cola.\n";
+        return;
+    }
+
+    NodoLista* huesped = buscarHuesped(codigo);
+    if (huesped == NULL || huesped->estado != 1) {
+        cout << "No se puede cancelar la espera de este registro.\n";
+        return;
+    }
+
+    if (anterior == NULL) {
+        frente = actual->siguiente;
+    } else {
+        anterior->siguiente = actual->siguiente;
+    }
+
+    if (actual == finCola) {
+        finCola = anterior;
+    }
+    if (frente == NULL) {
+        finCola = NULL;
+    }
+
+    huesped->estado = 5;
+    delete actual;
+    cout << "La espera fue cancelada correctamente.\n";
+}
+
+void atenderHuesped() {
+    if (colaVacia()) {
+        cout << "No hay huespedes para atender.\n";
+        return;
+    }
+
+    NodoLista* huesped = buscarHuesped(frente->codigo);
+    if (huesped == NULL || huesped->estado != 1) {
+        cout << "No se puede atender al huesped que esta al inicio de la cola.\n";
+        return;
+    }
+
+    NodoCola* auxiliar = frente;
+    frente = frente->siguiente;
+    if (frente == NULL) {
+        finCola = NULL;
+    }
+
+    huesped->estado = 2;
+    cout << "Se atendio al huesped: " << huesped->nombre << endl;
+    delete auxiliar;
+}
+
