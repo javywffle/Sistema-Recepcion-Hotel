@@ -32,4 +32,4 @@ NodoCola* finCola = NULL;
 
 NodoPila* cima = NULL;          
 
-int siguienteCodigo = 1; //ejemplo modulo
+int siguienteCodigo = 1; 
