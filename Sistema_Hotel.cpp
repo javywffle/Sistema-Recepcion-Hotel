@@ -32,6 +32,7 @@ NodoCola* finCola = NULL;
 
 NodoPila* cima = NULL;          
 
+<<<<<<< HEAD
 int siguienteCodigo = 1;
 
 NodoLista* buscarHuesped(int codigo) {
@@ -83,3 +84,6 @@ void insertarCola(int codigo, int prioridad) {
         }
     }
 }
+=======
+int siguienteCodigo = 1; 
+>>>>>>> 06f0bafb047f18c0fc0d297e1c25456bfcda3c5e
