@@ -32,4 +32,54 @@ NodoCola* finCola = NULL;
 
 NodoPila* cima = NULL;          
 
-int siguienteCodigo = 1; //ejemplo modulo
+int siguienteCodigo = 1;
+
+NodoLista* buscarHuesped(int codigo) {
+    NodoLista* actual = inicio;
+
+    while (actual != NULL) {
+        if (actual->codigo == codigo) {
+            return actual;
+        }
+        actual = actual->siguiente;
+    }
+
+    return NULL;
+}
+
+bool codigoExiste(int codigo) {
+    if (buscarHuesped(codigo) != NULL) {
+        return true;
+    }
+    return false;
+}
+
+void insertarCola(int codigo, int prioridad) {
+    NodoCola* nuevo = new NodoCola;
+    nuevo->codigo = codigo;
+    nuevo->prioridad = prioridad;
+    nuevo->siguiente = NULL;
+
+    if (frente == NULL || prioridad < frente->prioridad) {
+        nuevo->siguiente = frente;
+        frente = nuevo;
+
+        if (finCola == NULL) {
+            finCola = nuevo;
+        }
+    } else {
+        NodoCola* actual = frente;
+
+        while (actual->siguiente != NULL &&
+               actual->siguiente->prioridad <= prioridad) {
+            actual = actual->siguiente;
+        }
+
+        nuevo->siguiente = actual->siguiente;
+        actual->siguiente = nuevo;
+
+        if (nuevo->siguiente == NULL) {
+            finCola = nuevo;
+        }
+    }
+}
