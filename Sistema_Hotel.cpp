@@ -1,4 +1,4 @@
-#include <iostream>
+#include <iostream> // Definicion de estructuras, nodos y punteros
 #include <string>
 using namespace std; 
 
